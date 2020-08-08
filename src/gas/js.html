@@ -1,0 +1,48 @@
+<script>
+  window.onload = () => {
+    const $changeBackground = document.getElementById("changeBackground");
+    const $text = document.getElementById("text");
+    const $changeFontSize = document.getElementById("changeFontSize");
+    const $log = document.getElementById("log");
+  
+    $changeBackground.onchange = e => {
+      $text.style.background = e.target.value;
+    };
+    $changeFontSize.onchange = e => {
+      $text.style["font-size"] = e.target.value + "px";
+    };
+  
+    const speechRecognition = webkitSpeechRecognition || SpeechRecognition;
+    let logText = "";
+
+    const rec = new speechRecognition();
+    rec.lang = "ja-JP";
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.onresult = async event => {
+      const results = event.results;
+      for (let i = event.resultIndex; i < results.length; i++) {
+        if (results[i].isFinal) {
+          const text = results[results.length - 1][0].transcript;
+          $text.value = text;
+
+          logText = `${logText}
+${text}`;
+          $log.value = logText;
+
+          google.script.run.setText(logText);
+        } else {
+          const text = results[results.length - 1][0].transcript;
+          $text.innerText = text;
+        }
+      }
+    };
+    rec.onerror = err => {
+      console.log(err);
+    };
+    rec.onend = () => {
+      rec.start();
+    };
+    rec.start();
+  };
+</script>

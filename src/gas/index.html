@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Speech To Docs</title>
+  <?!= HtmlService.createHtmlOutputFromFile("css").getContent(); ?>
+  <?!= HtmlService.createHtmlOutputFromFile("js").getContent(); ?>
+</head>
+<body>
+  <div id="text"></div>
+  <div>
+    <span>背景色変更</span>
+    <select id="changeBackground">
+      <option value="greenyellow">緑</option>
+      <option value="blue">青</option>
+      <option value="white">白</option>
+    </select>
+  </div>
+  <div>
+    <span>文字の大きさ変更</span>
+    <input id="changeFontSize" type="range" min="0" max="100" value="20">
+  </div>
+  <div>
+    <span>ログ</span>
+    <br />
+    <textarea name="text" id="log" placeholder="" readonly=""></textarea>
+  </div>
+</body>
+</html>
