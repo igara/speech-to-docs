@@ -13,6 +13,7 @@ module.exports = {
     Utilities: {},
     UrlFetchApp: {},
     DocumentApp: {},
+    LanguageApp: {},
     HtmlService: {}
   },
   moduleDirectories: ["node_modules"],

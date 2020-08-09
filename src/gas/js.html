@@ -2,6 +2,8 @@
   window.onload = () => {
     const $changeBackground = document.getElementById("changeBackground");
     const $text = document.getElementById("text");
+    const $jaText = document.getElementById("jaText");
+    const $enText = document.getElementById("enText");
     const $changeFontSize = document.getElementById("changeFontSize");
     const $log = document.getElementById("log");
   
@@ -23,17 +25,24 @@
       const results = event.results;
       for (let i = event.resultIndex; i < results.length; i++) {
         if (results[i].isFinal) {
-          const text = results[results.length - 1][0].transcript;
-          $text.value = text;
+          const jaText = results[results.length - 1][0].transcript;
+          google.script.run.withSuccessHandler((enText) => {
+            $jaText.innerText = jaText;
+            $enText.innerText = enText;
+            logText = `${logText}
+${jaText}
+${enText}
+`;
+            $log.value = logText;
 
-          logText = `${logText}
-${text}`;
-          $log.value = logText;
-
-          google.script.run.setText(logText);
+            google.script.run.setText(logText);            
+          }).transrateJaToEn(jaText);
         } else {
-          const text = results[results.length - 1][0].transcript;
-          $text.innerText = text;
+          const jaText = results[results.length - 1][0].transcript;
+          google.script.run.withSuccessHandler((enText) => {
+            $jaText.innerText = jaText;
+            $enText.innerText = enText;        
+          }).transrateJaToEn(jaText);
         }
       }
     };
