@@ -1,4 +1,6 @@
 <script>
+  const noDataMessage = "[no data]";
+
   window.onload = () => {
     const $changeBackground = document.getElementById("changeBackground");
     const $text = document.getElementById("text");
@@ -13,7 +15,7 @@
     $changeFontSize.onchange = e => {
       $text.style["font-size"] = e.target.value + "px";
     };
-  
+
     const speechRecognition = webkitSpeechRecognition || SpeechRecognition;
     let logText = "";
 
@@ -35,13 +37,26 @@ ${enText}
 `;
             $log.value = logText;
 
-            google.script.run.setText(logText);            
+            google.script.run.setText(logText);
+          }).withFailureHandler(() => {
+            $jaText.innerText = jaText;
+            $enText.innerText = noDataMessage;
+            logText = `${logText}
+${jaText}
+${noDataMessage}
+`;
+            $log.value = logText;
+
+            google.script.run.setText(logText);
           }).transrateJaToEn(jaText);
         } else {
           const jaText = results[results.length - 1][0].transcript;
           google.script.run.withSuccessHandler((enText) => {
             $jaText.innerText = jaText;
-            $enText.innerText = enText;        
+            $enText.innerText = enText;
+          }).withFailureHandler(() => {
+            $jaText.innerText = jaText;
+            $enText.innerText = noDataMessage;
           }).transrateJaToEn(jaText);
         }
       }
